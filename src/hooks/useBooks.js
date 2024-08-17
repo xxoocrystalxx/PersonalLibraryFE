@@ -1,32 +1,38 @@
-import {useQuery } from '@apollo/client';
-import { GET_BOOKS } from '../graphql/queries';
+import { useQuery } from '@apollo/client'
+import { GET_BOOKS } from '../graphql/queries'
 
 const useBooks = (variables) => {
   // const [books,setBooks]=useState()
-  const {loading,data,fetchMore,refetch} = useQuery(GET_BOOKS,{
+  const { loading, data, fetchMore, refetch, error } = useQuery(GET_BOOKS, {
     fetchPolicy: 'cache-and-network',
     variables,
-  });
+  })
 
   const handleFetchMore = () => {
     const canFetchMore = !loading && data?.allBooks.pageInfo.hasNextPage
     if (!canFetchMore) {
-      return;
+      return
     }
     fetchMore({
       variables: {
         after: data.allBooks.pageInfo.endCursor,
-        ...variables
+        ...variables,
       },
-    });
-  };
- 
-  return {
-    books:data?.allBooks,
-    handleFetchMore,
-    refetch
+    })
   }
 
-};
+  if (error) {
+    console.log('query error')
+    console.log(error)
+    console.log(error.graphQLErrors[0].message)
+  }
 
-export default useBooks;
+  return {
+    books: data?.allBooks,
+    handleFetchMore,
+    refetch,
+    error,
+  }
+}
+
+export default useBooks
