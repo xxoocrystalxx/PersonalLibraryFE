@@ -33,8 +33,8 @@ const TextInput = ({ left, right, ...props }) => {
 
 TextInput.propTypes = {
   name: PropTypes.string.isRequired,
-  left: PropTypes.string.isRequired,
-  right: PropTypes.string.isRequired,
+  left: PropTypes.shape(),
+  right: PropTypes.shape(),
 }
 
 export default TextInput

@@ -39,7 +39,7 @@ const SelectField = ({ name, createble, ...props }) => {
 
 SelectField.propTypes = {
   name: PropTypes.string.isRequired,
-  createble: PropTypes.bool.isRequired,
+  createble: PropTypes.string,
   options: PropTypes.arrayOf(
     PropTypes.shape({
       label: PropTypes.string.isRequired,

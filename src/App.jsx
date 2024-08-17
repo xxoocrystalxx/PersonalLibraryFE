@@ -1,13 +1,9 @@
 import { Suspense, lazy, useState } from 'react'
 import { Route, Routes } from 'react-router-dom'
-// import BookList from './components/BookList'
-// import SignUp from './components/Header/SignUp'
-// import SignIn from './components/Header/SignIn'
-// import Navigation from './components/Header/Navigation'
-// import AddBook from './components/AddBook'
 // import Migrate from './components/Migrate';
 import useBooks from './hooks/useBooks'
 import { useConfig } from './hooks/useConfig'
+import { Spinner } from '@chakra-ui/react'
 
 const SignUp = lazy(() => import('./components/Header/SignUp'))
 const SignIn = lazy(() => import('./components/Header/SignIn'))
@@ -29,7 +25,7 @@ function App() {
 
   return (
     <>
-      <Suspense fallback={<div>Loading Navigation...</div>}>
+      <Suspense fallback={<Spinner color="red.500" />}>
         <Navigation setToken={setToken} refetch={refetch} />
       </Suspense>
 
@@ -38,7 +34,7 @@ function App() {
           <Route
             path="/SignUp"
             element={
-              <Suspense fallback={<div>Loading SignUp...</div>}>
+              <Suspense fallback={<Spinner color="red.500" />}>
                 <SignUp setToken={setToken} />
               </Suspense>
             }
@@ -47,7 +43,7 @@ function App() {
         <Route
           path="/SignIn"
           element={
-            <Suspense fallback={<div>Loading SignIn...</div>}>
+            <Suspense fallback={<Spinner color="red.500" />}>
               <SignIn setToken={setToken} />
             </Suspense>
           }
@@ -55,7 +51,7 @@ function App() {
         <Route
           path="/AddBook"
           element={
-            <Suspense fallback={<div>Loading AddBook...</div>}>
+            <Suspense fallback={<Spinner color="red.500" />}>
               <AddBook setToken={setToken} />
             </Suspense>
           }
@@ -63,7 +59,7 @@ function App() {
         <Route
           path="/"
           element={
-            <Suspense fallback={<div>Loading BookList...</div>}>
+            <Suspense fallback={<Spinner color="red.500" />}>
               <BookList books={nodes} handleFetchMore={handleFetchMore} />
             </Suspense>
           }
