@@ -7,7 +7,6 @@ import Loader from './components/Loader'
 
 const SignUp = lazy(() => import('./components/Header/SignUp'))
 const SignIn = lazy(() => import('./components/Header/SignIn'))
-const AddBook = lazy(() => import('./components/AddBook'))
 const BookList = lazy(() => import('./components/BookList'))
 const Navigation = lazy(() => import('./components/Header/Navigation'))
 
@@ -33,7 +32,6 @@ function App() {
             <Route path="/SignUp" element={<SignUp setToken={setToken} />} />
           )}
           <Route path="/SignIn" element={<SignIn setToken={setToken} />} />
-          <Route path="/AddBook" element={<AddBook setToken={setToken} />} />
           <Route
             path="/"
             element={

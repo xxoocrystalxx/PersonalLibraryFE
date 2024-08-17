@@ -53,7 +53,7 @@ const Navigation = ({ setToken, refetch }) => {
       />
       <SearchBar refetch={refetch} />
       {/* <MenuToggle toggle={toggle} isOpen={isOpen} /> */}
-      <MenuLinks signOut={signOut} data={data} />
+      <MenuLinks signOut={signOut} data={data} refetch={refetch} />
     </Flex>
   )
 }

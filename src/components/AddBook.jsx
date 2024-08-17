@@ -39,7 +39,7 @@ const initialValues = {
   female: '',
   description: '',
   comment: '',
-  time: '',
+  time: '古代',
   rating: 0,
   genres: [],
   saved: false,
@@ -51,7 +51,7 @@ const validationSchema = yup.object().shape({
   time: yup.string().required('time is required'),
 })
 
-const AddBook = ({ isOpen, onClose }) => {
+const AddBook = ({ isOpen, onClose, refetch }) => {
   const [addBook] = useAddBook()
   const { authors } = useAuthors()
   const { genres } = useGenres()
@@ -104,6 +104,7 @@ const AddBook = ({ isOpen, onClose }) => {
         isClosable: true,
       })
       resetForm()
+      refetch()
     } catch (e) {
       toast({
         title: e.graphQLErrors[0].message,
@@ -222,6 +223,7 @@ AddBook.propTypes = {
     time: PropTypes.string,
   }),
   setFieldValue: PropTypes.func,
+  refetch: PropTypes.func,
 }
 
 export default AddBook

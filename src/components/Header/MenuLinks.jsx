@@ -24,7 +24,7 @@ const MenuToggle = ({ toggle, isMenuOpen }) => (
   </Box>
 )
 
-const MenuLinks = ({ signOut, data }) => {
+const MenuLinks = ({ signOut, data, refetch }) => {
   const [isMenuOpen, setisMenuOpen] = useState(false)
   const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -106,7 +106,7 @@ const MenuLinks = ({ signOut, data }) => {
                 >
                   New Book
                 </Button>
-                <AddBook isOpen={isOpen} onClose={onClose} />
+                <AddBook isOpen={isOpen} onClose={onClose} refetch={refetch} />
               </>
               {/* </Link> */}
             </>
@@ -132,6 +132,7 @@ MenuLinks.propTypes = {
   data: PropTypes.shape({
     username: PropTypes.string.isRequired,
   }),
+  refetch: PropTypes.func.isRequired,
 }
 
 export default MenuLinks
