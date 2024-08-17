@@ -3,7 +3,7 @@ import { Route, Routes } from 'react-router-dom'
 // import Migrate from './components/Migrate';
 import useBooks from './hooks/useBooks'
 import { useConfig } from './hooks/useConfig'
-import { Spinner } from '@chakra-ui/react'
+import Loader from './components/Loader'
 
 const SignUp = lazy(() => import('./components/Header/SignUp'))
 const SignIn = lazy(() => import('./components/Header/SignIn'))
@@ -25,7 +25,7 @@ function App() {
 
   return (
     <>
-      <Suspense fallback={<Spinner color="red.500" />}>
+      <Suspense fallback={<Loader />}>
         <Navigation setToken={setToken} refetch={refetch} />
       </Suspense>
 
@@ -34,7 +34,7 @@ function App() {
           <Route
             path="/SignUp"
             element={
-              <Suspense fallback={<Spinner color="red.500" />}>
+              <Suspense fallback={<Loader />}>
                 <SignUp setToken={setToken} />
               </Suspense>
             }
@@ -43,7 +43,7 @@ function App() {
         <Route
           path="/SignIn"
           element={
-            <Suspense fallback={<Spinner color="red.500" />}>
+            <Suspense fallback={<Loader />}>
               <SignIn setToken={setToken} />
             </Suspense>
           }
@@ -51,7 +51,7 @@ function App() {
         <Route
           path="/AddBook"
           element={
-            <Suspense fallback={<Spinner color="red.500" />}>
+            <Suspense fallback={<Loader />}>
               <AddBook setToken={setToken} />
             </Suspense>
           }
@@ -59,7 +59,7 @@ function App() {
         <Route
           path="/"
           element={
-            <Suspense fallback={<Spinner color="red.500" />}>
+            <Suspense fallback={<Loader />}>
               <BookList books={nodes} handleFetchMore={handleFetchMore} />
             </Suspense>
           }

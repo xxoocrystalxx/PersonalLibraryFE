@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from 'react'
-import { Spinner } from '@chakra-ui/react'
+import Loader from '../components/Loader'
 import PropTypes from 'prop-types'
 
 export const ConfigContext = createContext()
@@ -32,7 +32,7 @@ export const ConfigProvider = ({ children }) => {
           height: '100vh',
         }}
       >
-        <Spinner color="red.500" />
+        <Loader />
       </div>
     )
   }

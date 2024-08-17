@@ -7,6 +7,7 @@ import Logo from './Logo'
 import MenuLinks from './MenuLinks'
 import SearchBar from './SearchBar'
 import PropTypes from 'prop-types'
+import Loader from '../Loader'
 
 const Navigation = ({ setToken, refetch }) => {
   let history = useNavigate()
@@ -15,7 +16,7 @@ const Navigation = ({ setToken, refetch }) => {
 
   const apolloClient = useApolloClient()
 
-  if (loading) return 'loading'
+  if (loading) return <Loader />
 
   const signOut = () => {
     setToken(null)

@@ -14,10 +14,12 @@ import {
 import { StarIcon } from '@chakra-ui/icons'
 import { RiMenLine, RiWomenLine, RiShieldUserLine } from 'react-icons/ri'
 import PropTypes from 'prop-types'
+import Loader from './Loader'
 
 const BookList = ({ books, handleFetchMore }) => {
   const [value, setValue] = useState(false)
-  // if(!books) return null
+
+  if (books.length === 0) return <Loader />
 
   const handle = () => {
     handleFetchMore()
