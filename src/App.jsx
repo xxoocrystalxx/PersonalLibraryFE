@@ -14,7 +14,10 @@ function App() {
   // const {data, loading} = useUserInfo()
   // eslint-disable-next-line no-unused-vars
   const [token, setToken] = useState(null)
-  const { books, handleFetchMore, refetch, error } = useBooks({ first: 5 })
+
+  const { books, handleFetchMore, refetch, error } = useBooks({
+    first: Number(import.meta.env.VITE_BOOK_NUMBER),
+  })
 
   const nodes = books ? books.edges.map((edge) => edge.node) : []
 
@@ -39,6 +42,7 @@ function App() {
                 books={nodes}
                 handleFetchMore={handleFetchMore}
                 error={error}
+                refetch={refetch}
               />
             }
           />

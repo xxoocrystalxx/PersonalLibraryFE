@@ -25,6 +25,7 @@ import MyRating from './Formik/Rating'
 import useGenres from '../hooks/useGenres'
 import SelectField from './Formik/SelectField'
 import MySwitch from './Formik/MySwitch'
+import useEditBook from '../hooks/useEditBook'
 
 const timeOptions = [
   { value: '古代', label: '古代' },
@@ -32,42 +33,62 @@ const timeOptions = [
   { value: '未世', label: '未世' },
 ]
 
-const initialValues = {
-  title: '',
-  author: '',
-  male: '',
-  female: '',
-  description: '',
-  comment: '',
-  time: '古代',
-  rating: 0,
-  genres: [],
-  saved: false,
-}
-
 const validationSchema = yup.object().shape({
   title: yup.string().required('title is required'),
   author: yup.string().required('author is required'),
   time: yup.string().required('time is required'),
 })
 
-const AddBook = ({ isOpen, onClose, refetch }) => {
+const AddBook = ({ isOpen, onClose, refetch, book }) => {
   const [addBook] = useAddBook()
+  const [editBook] = useEditBook()
   const { authors } = useAuthors()
   const { genres } = useGenres()
   const toast = useToast()
 
   if (!authors || !genres) return null
 
+  let initialValues = {
+    title: '',
+    author: '',
+    male: '',
+    female: '',
+    description: '',
+    comment: '',
+    time: '古代',
+    rating: 0,
+    genres: [],
+    saved: false,
+  }
+
+  const getGenreOptions = (genres) => {
+    return genres.map((g) => ({
+      label: g.name,
+      value: g.name,
+    }))
+  }
+
+  if (book) {
+    initialValues = {
+      title: book.title,
+      author: book.author.name,
+      male: book.male,
+      female: book.female,
+      description: book.description,
+      comment: book.comment,
+      time: book.time,
+      rating: book.rating,
+      genres: getGenreOptions(book.genres),
+      saved: book.saved,
+    }
+  }
+
   const options = authors.map((a) => ({
     label: a.name,
     value: a.name,
   }))
 
-  const genreOptions = genres.map((g) => ({
-    label: g.name,
-    value: g.name,
-  }))
+  const genreOptions = getGenreOptions(genres)
 
   const onSubmit = async (values, { resetForm }) => {
     const {
@@ -84,26 +105,45 @@ const AddBook = ({ isOpen, onClose, refetch }) => {
     // console.log(values)
     const genres = values.genres ? values.genres.map((g) => g.value) : []
     try {
-      await addBook({
-        title,
-        author,
-        male,
-        female,
-        description,
-        comment,
-        time,
-        rating,
-        genres,
-        saved,
-      })
-      // console.log("Added!")
+      if (book) {
+        await editBook({
+          id: book.id,
+          title,
+          author,
+          male,
+          female,
+          description,
+          comment,
+          time,
+          rating,
+          genres,
+          saved,
+        })
+        onClose()
+      } else {
+        await addBook({
+          title,
+          author,
+          male,
+          female,
+          description,
+          comment,
+          time,
+          rating,
+          genres,
+          saved,
+        })
+      }
+
       toast({
-        title: `Book ${title} created`,
+        title: book ? `Book ${title} edited` : `Book ${title} created`,
         status: 'success',
         duration: 5000,
         isClosable: true,
       })
-      resetForm()
+
+      resetForm(initialValues)
+
       refetch()
     } catch (e) {
       toast({
@@ -121,7 +161,7 @@ const AddBook = ({ isOpen, onClose, refetch }) => {
       <DrawerContent>
         <DrawerCloseButton />
         <DrawerHeader borderBottomWidth="1px">
-          <Heading color="teal.400">Add Book</Heading>
+          <Heading color="teal.400">{book ? 'Edit Book' : 'Add Book'}</Heading>
         </DrawerHeader>
 
         <DrawerBody>
@@ -224,6 +264,25 @@ AddBook.propTypes = {
   }),
   setFieldValue: PropTypes.func,
   refetch: PropTypes.func,
+  book: PropTypes.shape({
+    title: PropTypes.string,
+    author: PropTypes.shape({
+      name: PropTypes.string,
+    }),
+    comment: PropTypes.string,
+    description: PropTypes.string,
+    female: PropTypes.string,
+    genres: PropTypes.arrayOf(
+      PropTypes.shape({
+        name: PropTypes.string,
+      })
+    ),
+    male: PropTypes.string,
+    rating: PropTypes.number,
+    saved: PropTypes.bool,
+    time: PropTypes.string,
+    id: PropTypes.string,
+  }),
 }
 
 export default AddBook

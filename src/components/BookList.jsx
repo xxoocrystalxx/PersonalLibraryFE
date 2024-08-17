@@ -11,14 +11,20 @@ import {
   Button,
   Center,
   useToast,
+  IconButton,
+  useDisclosure,
 } from '@chakra-ui/react'
-import { StarIcon } from '@chakra-ui/icons'
+import { StarIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons'
 import { RiMenLine, RiWomenLine, RiShieldUserLine } from 'react-icons/ri'
 import PropTypes from 'prop-types'
+import AddBook from './AddBook'
 
-const BookList = ({ books, handleFetchMore, error }) => {
+const BookList = ({ books, handleFetchMore, error, refetch }) => {
   const [value, setValue] = useState(false)
+  const [bookToEdit, setBookToEdit] = useState()
   const toast = useToast()
+  const { isOpen, onOpen, onClose } = useDisclosure()
+
   if (books.length === 0) return ''
 
   if (error) {
@@ -37,6 +43,15 @@ const BookList = ({ books, handleFetchMore, error }) => {
       setValue(false)
     }, 1000)
   }
+
+  const handleDelete = () => {
+    console.log('delte')
+  }
+
+  const handleEdit = (b) => {
+    setBookToEdit(b)
+    onOpen()
+  }
   return (
     <Box>
       {books.map((b) => (
@@ -52,9 +67,14 @@ const BookList = ({ books, handleFetchMore, error }) => {
           bg={b.saved ? 'green.50' : 'white'}
         >
           <Box alignItems={'flex-start'} flex="1">
-            <Heading as="h4" size="md" p={1}>
-              {b.title}
-            </Heading>
+            <Box display="flex" justifyContent="space-between">
+              <Heading as="h4" size="md" p={1}>
+                {b.title}
+              </Heading>
+              <Heading as="h4" size="md" p={1}>
+                {b.time}
+              </Heading>
+            </Box>
             <Text fontSize="xs" color="gray.600" p={1}>
               <Icon as={RiMenLine} w={4} h={4} /> {b.male}
             </Text>
@@ -62,9 +82,14 @@ const BookList = ({ books, handleFetchMore, error }) => {
               <Icon as={RiWomenLine} w={4} h={4} /> {b.female}
             </Text>
             <Stack direction="row" p={1}>
-              <Text fontSize="xs">
-                {' '}
-                <Icon as={RiShieldUserLine} w={4} h={4} /> {b.author.name}
+              <Text
+                fontSize="xs"
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+              >
+                <Icon as={RiShieldUserLine} w={4} h={4} mr={1} />{' '}
+                {b.author.name}
               </Text>
               <Spacer />
               {b.genres.map((g) => (
@@ -92,6 +117,22 @@ const BookList = ({ books, handleFetchMore, error }) => {
                 ))}
             </Box>
           </Box>
+          <Box
+            display="flex"
+            flexDirection="column"
+            justifyContent="space-between"
+          >
+            <IconButton
+              colorScheme="blue"
+              icon={<EditIcon />}
+              onClick={() => handleEdit(b)}
+            />
+            <IconButton
+              colorScheme="red"
+              icon={<DeleteIcon />}
+              onClick={handleDelete}
+            />
+          </Box>
         </Flex>
       ))}
       <Center p={2}>
@@ -104,6 +145,12 @@ const BookList = ({ books, handleFetchMore, error }) => {
           Load More
         </Button>
       </Center>
+      <AddBook
+        isOpen={isOpen}
+        onClose={onClose}
+        refetch={refetch}
+        book={bookToEdit}
+      />
     </Box>
   )
 }
@@ -132,6 +179,7 @@ BookList.propTypes = {
   ),
   handleFetchMore: PropTypes.func.isRequired,
   error: PropTypes.func,
+  refetch: PropTypes.func,
 }
 
 export default BookList
