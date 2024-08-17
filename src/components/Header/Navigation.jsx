@@ -37,9 +37,8 @@ const Navigation = ({ setToken, refetch }) => {
       p={2}
       bg="white"
       sx={{
-        position: '-webkit-sticky',
-        // eslint-disable-next-line no-dupe-keys
-        /* Safari */ position: 'sticky',
+        position: '-webkit-sticky', //standar value
+        WebkitPosition: 'sticky', //for Safari
         top: '0',
       }}
       wrap={{ base: 'wrap', md: 'nowrap' }}

@@ -20,3 +20,4 @@
 
 - Changed component js with jsx
 - delete proxy from package.json to vite.config.js
+- react vite build is on folder **dist**, not **build**

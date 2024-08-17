@@ -34,8 +34,8 @@ jobs:
 
       - name: Copy build folder to backend repository
         run: |
-          rm -rf backend/build
-          cp -R build backend/
+          rm -rf backend/dist
+          cp -R dist backend/
 
       - name: Commit and push changes to backend repository
         run: |
