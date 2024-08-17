@@ -4,7 +4,6 @@ import { Route, Routes } from 'react-router-dom'
 import useBooks from './hooks/useBooks'
 import { useConfig } from './hooks/useConfig'
 import Loader from './components/Loader'
-import { useToast } from '@chakra-ui/react'
 
 const SignUp = lazy(() => import('./components/Header/SignUp'))
 const SignIn = lazy(() => import('./components/Header/SignIn'))
@@ -14,20 +13,9 @@ const Navigation = lazy(() => import('./components/Header/Navigation'))
 
 function App() {
   // const {data, loading} = useUserInfo()
-  // console.log(data);
   // eslint-disable-next-line no-unused-vars
   const [token, setToken] = useState(null)
-  const toast = useToast()
   const { books, handleFetchMore, refetch, error } = useBooks({ first: 5 })
-  if (error) {
-    toast({
-      title: 'Fetch book error',
-      description: error.graphQLErrors[0].message,
-      status: 'error',
-      duration: 5000,
-      isClosable: true,
-    })
-  }
 
   const nodes = books ? books.edges.map((edge) => edge.node) : []
 
@@ -49,7 +37,11 @@ function App() {
           <Route
             path="/"
             element={
-              <BookList books={nodes} handleFetchMore={handleFetchMore} />
+              <BookList
+                books={nodes}
+                handleFetchMore={handleFetchMore}
+                error={error}
+              />
             }
           />
         </Routes>

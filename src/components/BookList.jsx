@@ -10,17 +10,26 @@ import {
   Icon,
   Button,
   Center,
+  useToast,
 } from '@chakra-ui/react'
 import { StarIcon } from '@chakra-ui/icons'
 import { RiMenLine, RiWomenLine, RiShieldUserLine } from 'react-icons/ri'
 import PropTypes from 'prop-types'
-import Loader from './Loader'
 
-const BookList = ({ books, handleFetchMore }) => {
+const BookList = ({ books, handleFetchMore, error }) => {
   const [value, setValue] = useState(false)
+  const toast = useToast()
+  if (books.length === 0) return ''
 
-  if (books.length === 0) return <Loader />
-
+  if (error) {
+    toast({
+      title: 'Fetch book',
+      description: error.graphQLErrors[0].message,
+      status: 'error',
+      duration: 5000,
+      isClosable: true,
+    })
+  }
   const handle = () => {
     handleFetchMore()
     setValue(true)
@@ -122,6 +131,7 @@ BookList.propTypes = {
     })
   ),
   handleFetchMore: PropTypes.func.isRequired,
+  error: PropTypes.func,
 }
 
 export default BookList

@@ -6,32 +6,29 @@ import PropTypes from 'prop-types'
 
 const SelectField = ({ name, createble, ...props }) => {
   const [field, meta, helpers] = useField(name)
+
+  const getSelectedOption = () => {
+    if (props.options && field.value) {
+      return (
+        props.options.find((option) => option.value === field.value) || {
+          label: field.value,
+          value: field.value,
+        }
+      )
+    }
+    return ''
+  }
+
+  const SelectComponent = createble ? CreatableSelect : Select
+
   return (
     <FormControl isInvalid={meta.error && meta.touched}>
-      {createble ? (
-        <CreatableSelect
-          {...props}
-          {...field}
-          onChange={(option) => helpers.setValue(option.value)}
-          value={
-            props.options
-              ? props.options.find((option) => option.value === props.value)
-              : ''
-          }
-        />
-      ) : (
-        <Select
-          {...field}
-          {...props}
-          value={
-            props.options
-              ? props.options.find((option) => option.value === props.value)
-              : ''
-          }
-          onChange={(option) => helpers.setValue(option.value)}
-        />
-      )}
-
+      <SelectComponent
+        {...props}
+        {...field}
+        value={getSelectedOption()}
+        onChange={(option) => helpers.setValue(option.value)}
+      ></SelectComponent>
       <FormErrorMessage>{meta.error}</FormErrorMessage>
     </FormControl>
   )

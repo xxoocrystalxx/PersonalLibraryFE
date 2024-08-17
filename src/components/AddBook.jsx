@@ -103,9 +103,14 @@ const AddBook = ({ isOpen, onClose }) => {
         duration: 5000,
         isClosable: true,
       })
-      resetForm(initialValues)
+      resetForm()
     } catch (e) {
-      console.log(e)
+      toast({
+        title: e.graphQLErrors[0].message,
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      })
     }
   }
 
@@ -136,6 +141,7 @@ const AddBook = ({ isOpen, onClose }) => {
                       placeholder=" Author "
                       options={options}
                       createble="true"
+                      value={props.values.author}
                     />
                   </Box>
                   <Stack direction={['column', 'row', 'row', 'row']}>
@@ -144,6 +150,7 @@ const AddBook = ({ isOpen, onClose }) => {
                       placeholder="时代背景"
                       options={timeOptions}
                       isSearchable="false"
+                      value={props.values.time}
                     />
                     <MySwitch
                       name="saved"
@@ -166,6 +173,7 @@ const AddBook = ({ isOpen, onClose }) => {
                       onChange={(newvalue) =>
                         props.setFieldValue('genres', newvalue)
                       }
+                      value={props.values.genres}
                       options={genreOptions}
                     />
                   </Box>
@@ -209,6 +217,9 @@ AddBook.propTypes = {
   values: PropTypes.shape({
     rating: PropTypes.number.isRequired,
     saved: PropTypes.bool.isRequired, // Assuming saved is a boolean
+    genres: PropTypes.arrayOf(),
+    author: PropTypes.string,
+    time: PropTypes.string,
   }),
   setFieldValue: PropTypes.func,
 }
