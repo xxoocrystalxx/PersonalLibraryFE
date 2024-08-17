@@ -15,6 +15,7 @@ import useSignIn from '../../hooks/useSignIn'
 import { useNavigate } from 'react-router-dom'
 import TextInput from '../Formik/TextInput'
 import PropTypes from 'prop-types'
+import { useToast } from '@chakra-ui/react'
 
 const CFaUserAlt = chakra(FaUserAlt)
 const CFaLock = chakra(FaLock)
@@ -32,7 +33,8 @@ const validationSchema = yup.object().shape({
 const SignIn = ({ setToken }) => {
   const [showPassword, setShowPassword] = useState(false)
   const [login] = useSignIn({ setToken })
-  let history = useNavigate()
+  const toast = useToast()
+  let navigate = useNavigate()
 
   const handleShowClick = () => setShowPassword(!showPassword)
 
@@ -41,9 +43,15 @@ const SignIn = ({ setToken }) => {
     const { username, password } = values
     try {
       await login({ username, password })
-      history.push('/')
+      navigate('/')
     } catch (e) {
-      console.log(e)
+      toast({
+        title: 'Login',
+        description: e.graphQLErrors[0].message,
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      })
     }
   }
 

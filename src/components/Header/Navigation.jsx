@@ -10,7 +10,7 @@ import PropTypes from 'prop-types'
 import Loader from '../Loader'
 
 const Navigation = ({ setToken, refetch }) => {
-  let history = useNavigate()
+  let navigate = useNavigate()
 
   const { data, loading } = useUserInfo()
 
@@ -22,7 +22,7 @@ const Navigation = ({ setToken, refetch }) => {
     setToken(null)
     localStorage.clear()
     apolloClient.resetStore()
-    history.push('/')
+    navigate('/')
   }
 
   return (

@@ -23,18 +23,7 @@ export const ConfigProvider = ({ children }) => {
   }, [])
 
   if (!config) {
-    return (
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: '100vh',
-        }}
-      >
-        <Loader />
-      </div>
-    )
+    return <Loader />
   }
 
   return (

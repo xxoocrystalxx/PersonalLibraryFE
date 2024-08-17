@@ -28,43 +28,21 @@ function App() {
       <Suspense fallback={<Loader />}>
         <Navigation setToken={setToken} refetch={refetch} />
       </Suspense>
-
-      <Routes>
-        {showSignUp && (
+      <Suspense fallback={<Loader />}>
+        <Routes>
+          {showSignUp && (
+            <Route path="/SignUp" element={<SignUp setToken={setToken} />} />
+          )}
+          <Route path="/SignIn" element={<SignIn setToken={setToken} />} />
+          <Route path="/AddBook" element={<AddBook setToken={setToken} />} />
           <Route
-            path="/SignUp"
+            path="/"
             element={
-              <Suspense fallback={<Loader />}>
-                <SignUp setToken={setToken} />
-              </Suspense>
+              <BookList books={nodes} handleFetchMore={handleFetchMore} />
             }
           />
-        )}
-        <Route
-          path="/SignIn"
-          element={
-            <Suspense fallback={<Loader />}>
-              <SignIn setToken={setToken} />
-            </Suspense>
-          }
-        />
-        <Route
-          path="/AddBook"
-          element={
-            <Suspense fallback={<Loader />}>
-              <AddBook setToken={setToken} />
-            </Suspense>
-          }
-        />
-        <Route
-          path="/"
-          element={
-            <Suspense fallback={<Loader />}>
-              <BookList books={nodes} handleFetchMore={handleFetchMore} />
-            </Suspense>
-          }
-        />
-      </Routes>
+        </Routes>
+      </Suspense>
     </>
   )
 }

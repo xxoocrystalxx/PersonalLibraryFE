@@ -7,6 +7,7 @@ import {
   chakra,
   Box,
   Avatar,
+  useToast,
 } from '@chakra-ui/react'
 import { FaUserAlt, FaLock } from 'react-icons/fa'
 import { Formik, Form } from 'formik'
@@ -36,18 +37,24 @@ const validationSchema = yup.object().shape({
 const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false)
   const [signUp] = useSignUp()
-  let history = useNavigate()
+  let navigate = useNavigate()
+  const toast = useToast()
 
   const handleShowClick = () => setShowPassword(!showPassword)
 
   const onSubmit = async (values) => {
-    // console.log(values);
     const { username, password } = values
     try {
       await signUp({ username, password })
-      history.push('/')
+      navigate('/')
     } catch (e) {
-      console.log(e)
+      toast({
+        title: 'SignUp',
+        description: e.graphQLErrors[0].message,
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      })
     }
   }
 
