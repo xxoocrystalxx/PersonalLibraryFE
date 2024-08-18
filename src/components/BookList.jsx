@@ -24,9 +24,11 @@ const BookList = ({ books, handleFetchMore, error, refetch }) => {
   const [bookToEdit, setBookToEdit] = useState()
   const toast = useToast()
   const { isOpen, onOpen, onClose } = useDisclosure()
+  console.log('booklisst')
 
   if (books.length === 0) return ''
-
+  console.log('after')
+  console.log(books)
   if (error) {
     toast({
       title: 'Fetch book',
@@ -57,7 +59,6 @@ const BookList = ({ books, handleFetchMore, error, refetch }) => {
       {books.map((b) => (
         <Flex
           key={b.id}
-          // w="100%"
           shadow="md"
           borderWidth="1px"
           p={2}

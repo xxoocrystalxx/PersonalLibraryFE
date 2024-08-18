@@ -17,6 +17,18 @@ export default defineConfig({
         rewrite: (path) => path,
       },
     },
+    // proxy: {
+    //   '/api': {
+    //     target: 'https://personal-library-pi.vercel.app',
+    //     changeOrigin: true,
+    //     rewrite: (path) => path,
+    //   },
+    //   '/graphql': {
+    //     target: 'https://personal-library-pi.vercel.app',
+    //     changeOrigin: true,
+    //     rewrite: (path) => path,
+    //   },
+    // },
   },
   build: {
     chunkSizeWarningLimit: 1000,

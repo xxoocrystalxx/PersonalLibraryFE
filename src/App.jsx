@@ -15,6 +15,7 @@ function App() {
   // eslint-disable-next-line no-unused-vars
   const [token, setToken] = useState(null)
 
+  console.log(import.meta.env.VITE_BOOK_NUMBER)
   const { books, handleFetchMore, refetch, error } = useBooks({
     first: Number(import.meta.env.VITE_BOOK_NUMBER),
   })
