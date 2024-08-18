@@ -1,15 +1,50 @@
-import {useQuery } from '@apollo/client';
-import { GET_AUTHORS } from '../graphql/queries';
+import { useQuery } from '@apollo/client'
+import { GET_AUTHORS } from '../graphql/queries'
 
-const useAuthors = () => {
+const useAuthors = (variables) => {
+  const { data, loading, fetchMore, refetch, error } = useQuery(GET_AUTHORS, {
+    fetchPolicy: 'cache-and-network',
+    variables,
+  })
 
-  const { data, loading, } = useQuery(GET_AUTHORS,);
+  const handleFetchMore = () => {
+    const canFetchMore = !loading && data?.allAuthors.pageInfo.hasNextPage
+
+    if (!canFetchMore) {
+      return
+    }
+    console.log('fetchmore')
+    console.log(data.allAuthors.pageInfo)
+    fetchMore({
+      variables: {
+        after: data.allAuthors.pageInfo.endCursor,
+        ...variables,
+      },
+      updateQuery: (previousResult, { fetchMoreResult }) => {
+        if (!fetchMoreResult) return previousResult
+
+        return {
+          allAuthors: {
+            __typename: previousResult.allAuthors.__typename,
+            edges: [
+              ...previousResult.allAuthors.edges,
+              ...fetchMoreResult.allAuthors.edges,
+            ],
+            pageInfo: fetchMoreResult.allAuthors.pageInfo,
+            totalCount: fetchMoreResult.allAuthors.totalCount,
+          },
+        }
+      },
+    })
+  }
 
   return {
-    authors: data?.allAuthors,
+    authorsCursor: data?.allAuthors,
     loading,
-  };
+    handleFetchMore,
+    refetch,
+    error,
+  }
+}
 
-};
-
-export default useAuthors;
+export default useAuthors

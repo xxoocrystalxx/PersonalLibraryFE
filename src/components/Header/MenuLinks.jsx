@@ -79,7 +79,7 @@ const MenuLinks = ({ signOut, data, refetch }) => {
           ) : (
             <>
               <Popover placement="bottom-start">
-                {({ onClose }) => (
+                {({ onClose: onClosePop }) => (
                   <>
                     <PopoverTrigger>
                       <Avatar
@@ -93,9 +93,9 @@ const MenuLinks = ({ signOut, data, refetch }) => {
                       <Button
                         as={ReachLink}
                         to="/AuthorList"
-                        onClick={onClose}
                         _hover={{ textDecoration: 'none', bg: 'gray.100' }}
                         bg={'white'}
+                        onClick={onClosePop}
                       >
                         Author List
                       </Button>

@@ -2,6 +2,7 @@ import {
   Badge,
   Box,
   Button,
+  Center,
   Flex,
   Heading,
   IconButton,
@@ -14,32 +15,36 @@ import {
   ModalOverlay,
   Text,
   useDisclosure,
+  useToast,
 } from '@chakra-ui/react'
-import useAuthors from '../hooks/useAuthors'
 import Loader from './Loader'
 import { DeleteIcon, EditIcon } from '@chakra-ui/icons'
 import { useCallback, useState } from 'react'
+import PropTypes from 'prop-types'
 
-const AuthorList = () => {
-  const { authors, loading } = useAuthors()
+const AuthorList = ({ authorsFetch }) => {
   const [author, setAuthor] = useState()
+  const [value, setValue] = useState(false)
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const toast = useToast()
 
-  // const handleEdit = useCallback(
-  //   (author) => {
-  //     setAuthor(author)
-  //     onOpen()
-  //   },
-  //   [onOpen]
-  // )
+  if (authorsFetch.loading) return <Loader />
 
-  // const handleDelete = useCallback((author) => {
-  //   // Delete logic here
-  // }, [])
+  if (authorsFetch.error) {
+    toast({
+      title: 'Fetch book',
+      description: authorsFetch.error.graphQLErrors[0].message,
+      status: 'error',
+      duration: 5000,
+      isClosable: true,
+    })
+  }
 
-  if (loading) return <Loader />
+  // console.log('author render')
 
-  console.log('render')
+  const authors = authorsFetch.authorsCursor
+    ? authorsFetch.authorsCursor.edges.map((edge) => edge.node)
+    : []
 
   const handleEdit = (author) => {
     console.log('edit')
@@ -47,9 +52,16 @@ const AuthorList = () => {
     // setAuthor(author)
     onOpen()
   }
-  console.log(authors.length)
 
   const handleDelete = (author) => {}
+
+  const handleFetchMore = () => {
+    authorsFetch.handleFetchMore()
+    setValue(true)
+    setTimeout(() => {
+      setValue(false)
+    }, 1000)
+  }
   return (
     <>
       <Box borderWidth="1px" borderRadius="lg" p={2}>
@@ -96,6 +108,17 @@ const AuthorList = () => {
           </Flex>
         ))}
       </Box>
+      <Center p={2}>
+        <Button
+          colorScheme="teal"
+          variant="solid"
+          onClick={handleFetchMore}
+          isLoading={value}
+          isDisabled={!authorsFetch.authorsCursor.pageInfo.hasNextPage}
+        >
+          Load More
+        </Button>
+      </Center>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
@@ -115,4 +138,19 @@ const AuthorList = () => {
   )
 }
 
+AuthorList.propTypes = {
+  authorsFetch: PropTypes.shape({
+    authorsCursor: PropTypes.shape(),
+    handleFetchMore: PropTypes.func,
+    refetch: PropTypes.func,
+    error: PropTypes.shape(),
+    loading: PropTypes.bool,
+    // edges: PropTypes.arrayOf(
+    //   PropTypes.shape({
+    //     cursor: PropTypes.string,
+    //     node: PropTypes.shape(),
+    //   })
+    // ),
+  }),
+}
 export default AuthorList

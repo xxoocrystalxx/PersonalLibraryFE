@@ -4,6 +4,7 @@ import { Route, Routes } from 'react-router-dom'
 import useBooks from './hooks/useBooks'
 import { useConfig } from './hooks/useConfig'
 import Loader from './components/Loader'
+import useAuthors from './hooks/useAuthors'
 
 const SignUp = lazy(() => import('./components/Header/SignUp'))
 const SignIn = lazy(() => import('./components/Header/SignIn'))
@@ -19,6 +20,9 @@ function App() {
     first: 5,
   })
 
+  const authorsFetch = useAuthors({
+    first: 5,
+  })
   const config = useConfig()
   const showSignUp = config.REACT_APP_SHOW_SIGNUP === 'true'
 
@@ -45,7 +49,10 @@ function App() {
               />
             }
           />
-          <Route path="/AuthorList" element={<AuthorList />} />
+          <Route
+            path="/AuthorList"
+            element={<AuthorList authorsFetch={authorsFetch} />}
+          />
         </Routes>
       </Suspense>
     </>

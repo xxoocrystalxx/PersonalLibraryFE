@@ -19,13 +19,13 @@ import PropTypes from 'prop-types'
 
 import TextInput from './Formik/TextInput'
 import useAddBook from '../hooks/useAddBook'
-import useAuthors from '../hooks/useAuthors'
 import TextArea from './Formik/TextArea'
 import MyRating from './Formik/Rating'
 import useGenres from '../hooks/useGenres'
 import SelectField from './Formik/SelectField'
 import MySwitch from './Formik/MySwitch'
 import useEditBook from '../hooks/useEditBook'
+import useAuthorsSimply from '../hooks/useAuthorsSimply'
 
 const timeOptions = [
   { value: '古代', label: '古代' },
@@ -42,7 +42,7 @@ const validationSchema = yup.object().shape({
 const AddBook = ({ isOpen, onClose, refetch, book }) => {
   const [addBook] = useAddBook()
   const [editBook] = useEditBook()
-  const { authors } = useAuthors()
+  const { authors } = useAuthorsSimply()
   const { genres } = useGenres()
   const toast = useToast()
 

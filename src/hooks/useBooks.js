@@ -21,12 +21,6 @@ const useBooks = (variables) => {
     })
   }
 
-  if (error) {
-    console.log('query error')
-    console.log(error)
-    console.log(error.graphQLErrors[0].message)
-  }
-
   return {
     booksCursor: data?.allBooks,
     handleFetchMore,

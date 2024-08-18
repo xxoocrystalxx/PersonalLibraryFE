@@ -10,14 +10,31 @@ export const USER_INFO = gql`
 `
 
 export const GET_AUTHORS = gql`
-  query {
-    allAuthors {
-      name
-      bookCount
+  query allAuthors($search: String, $first: Int, $after: String) {
+    allAuthors(search: $search, first: $first, after: $after) {
+      edges {
+        cursor
+        node {
+          id
+          name
+          bookCount
+        }
+      }
+      pageInfo {
+        endCursor
+        hasNextPage
+      }
+      totalCount
     }
   }
 `
-
+export const GET_AUTHORS_SYMPLY = gql`
+  query {
+    allAuthorSimply {
+      name
+    }
+  }
+`
 export const GET_GENRES = gql`
   query {
     allGenres {
