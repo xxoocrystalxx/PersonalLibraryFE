@@ -15,11 +15,9 @@ function App() {
   // const {data, loading} = useUserInfo()
   const [token, setToken] = useState(null)
 
-  const { books, handleFetchMore, refetch, error } = useBooks({
-    first: 20,
+  const { booksCursor, handleFetchMore, refetch, error } = useBooks({
+    first: 5,
   })
-
-  const nodes = books ? books.edges.map((edge) => edge.node) : []
 
   const config = useConfig()
   const showSignUp = config.REACT_APP_SHOW_SIGNUP === 'true'
@@ -39,7 +37,7 @@ function App() {
             path="/"
             element={
               <BookList
-                books={nodes}
+                booksCursor={booksCursor}
                 handleFetchMore={handleFetchMore}
                 error={error}
                 refetch={refetch}

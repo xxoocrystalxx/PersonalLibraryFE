@@ -19,13 +19,14 @@ import { RiMenLine, RiWomenLine, RiShieldUserLine } from 'react-icons/ri'
 import PropTypes from 'prop-types'
 import AddBook from './AddBook'
 
-const BookList = ({ books, handleFetchMore, error, refetch, token }) => {
+const BookList = ({ booksCursor, handleFetchMore, error, refetch, token }) => {
   const [value, setValue] = useState(false)
   const [bookToEdit, setBookToEdit] = useState()
   const toast = useToast()
   const { isOpen, onOpen, onClose } = useDisclosure()
 
-  if (books.length === 0) return ''
+  if (!booksCursor) return ''
+  const books = booksCursor ? booksCursor.edges.map((edge) => edge.node) : []
 
   if (error) {
     toast({
@@ -142,6 +143,7 @@ const BookList = ({ books, handleFetchMore, error, refetch, token }) => {
           variant="solid"
           onClick={handle}
           isLoading={value}
+          isDisabled={!booksCursor.pageInfo.hasNextPage}
         >
           Load More
         </Button>
@@ -157,27 +159,40 @@ const BookList = ({ books, handleFetchMore, error, refetch, token }) => {
 }
 
 BookList.propTypes = {
-  books: PropTypes.arrayOf(
-    PropTypes.shape({
-      title: PropTypes.string.isRequired,
-      author: PropTypes.shape({
-        name: PropTypes.string.isRequired,
-      }),
-      male: PropTypes.string,
-      female: PropTypes.string,
-      description: PropTypes.string,
-      comment: PropTypes.string,
-      time: PropTypes.string,
-      rating: PropTypes.number,
-      genres: PropTypes.arrayOf(
-        PropTypes.shape({
-          name: PropTypes.string.isRequired,
-        })
-      ),
-      saved: PropTypes.bool,
-      id: PropTypes.string,
-    })
-  ),
+  booksCursor: PropTypes.shape({
+    edges: PropTypes.arrayOf(
+      PropTypes.shape({
+        cursor: PropTypes.string,
+        node: PropTypes.shape(),
+      })
+    ),
+    pageInfo: PropTypes.shape({
+      endCursor: PropTypes.string,
+      hasNextPage: PropTypes.bool,
+    }),
+    totalCount: PropTypes.number,
+  }),
+  // books: PropTypes.arrayOf(
+  //   PropTypes.shape({
+  //     title: PropTypes.string.isRequired,
+  //     author: PropTypes.shape({
+  //       name: PropTypes.string.isRequired,
+  //     }),
+  //     male: PropTypes.string,
+  //     female: PropTypes.string,
+  //     description: PropTypes.string,
+  //     comment: PropTypes.string,
+  //     time: PropTypes.string,
+  //     rating: PropTypes.number,
+  //     genres: PropTypes.arrayOf(
+  //       PropTypes.shape({
+  //         name: PropTypes.string.isRequired,
+  //       })
+  //     ),
+  //     saved: PropTypes.bool,
+  //     id: PropTypes.string,
+  //   })
+  // ),
   handleFetchMore: PropTypes.func.isRequired,
   error: PropTypes.func,
   refetch: PropTypes.func,

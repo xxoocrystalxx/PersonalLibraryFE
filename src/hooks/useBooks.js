@@ -28,7 +28,7 @@ const useBooks = (variables) => {
   }
 
   return {
-    books: data?.allBooks,
+    booksCursor: data?.allBooks,
     handleFetchMore,
     refetch,
     error,
