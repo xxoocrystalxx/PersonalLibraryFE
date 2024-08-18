@@ -25,6 +25,10 @@ jobs:
       - name: Build the app
         run: npm run build
 
+      - name: Get commit message
+        id: get_commit_message
+        run: echo "COMMIT_MESSAGE=$(git log -1 --pretty=%B)" >> $GITHUB_ENV
+
       - name: Checkout backend repository
         uses: actions/checkout@v3
         with:
@@ -43,5 +47,5 @@ jobs:
           git config --local user.name "GitHub Actions"
           git config --local user.email "actions@github.com"
           git add .
-          git commit -m "Update frontend build"
+          git commit -m "${{ env.COMMIT_MESSAGE }}"
           git push
