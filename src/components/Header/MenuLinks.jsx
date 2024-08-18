@@ -26,6 +26,7 @@ const MenuToggle = ({ toggle, isMenuOpen }) => (
 
 const MenuLinks = ({ signOut, data, refetch }) => {
   const [isMenuOpen, setisMenuOpen] = useState(false)
+  //add book component
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   const toggle = () => setisMenuOpen(!isMenuOpen)
@@ -78,24 +79,37 @@ const MenuLinks = ({ signOut, data, refetch }) => {
           ) : (
             <>
               <Popover placement="bottom-start">
-                <PopoverTrigger>
-                  <Avatar
-                    as={Button}
-                    name={data.username}
-                    size="md"
-                    _hover={{ bg: 'teal.700' }}
-                  />
-                </PopoverTrigger>
-                <PopoverContent border={0} boxShadow={'xl'} w={'2xs'}>
-                  <Link
-                    as={Button}
-                    _hover={{ textDecoration: 'none', bg: 'gray.100' }}
-                    onClick={signOut}
-                    bg={'white'}
-                  >
-                    Logout
-                  </Link>
-                </PopoverContent>
+                {({ onClose }) => (
+                  <>
+                    <PopoverTrigger>
+                      <Avatar
+                        as={Button}
+                        name={data.username}
+                        size="md"
+                        _hover={{ bg: 'teal.700' }}
+                      />
+                    </PopoverTrigger>
+                    <PopoverContent border={0} boxShadow={'xl'} w={'2xs'}>
+                      <Button
+                        as={ReachLink}
+                        to="/AuthorList"
+                        onClick={onClose}
+                        _hover={{ textDecoration: 'none', bg: 'gray.100' }}
+                        bg={'white'}
+                      >
+                        Author List
+                      </Button>
+                      <Link
+                        as={Button}
+                        _hover={{ textDecoration: 'none', bg: 'gray.100' }}
+                        onClick={signOut}
+                        bg={'white'}
+                      >
+                        Logout
+                      </Link>
+                    </PopoverContent>
+                  </>
+                )}
               </Popover>
               {/* <Link as={ReachLink} to="/AddBook" rounded={'md'} _hover={{textDecoration: 'none',}}> */}
               <>

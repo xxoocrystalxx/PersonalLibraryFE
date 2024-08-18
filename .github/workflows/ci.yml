@@ -47,5 +47,5 @@ jobs:
           git config --local user.name "GitHub Actions"
           git config --local user.email "actions@github.com"
           git add .
-          git commit -m "${{ env.COMMIT_MESSAGE }}"
+          git commit -m "Update FE build: ${{ env.COMMIT_MESSAGE }}"
           git push

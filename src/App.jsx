@@ -9,10 +9,10 @@ const SignUp = lazy(() => import('./components/Header/SignUp'))
 const SignIn = lazy(() => import('./components/Header/SignIn'))
 const BookList = lazy(() => import('./components/BookList'))
 const Navigation = lazy(() => import('./components/Header/Navigation'))
+const AuthorList = lazy(() => import('./components/AuthorList'))
 
 function App() {
   // const {data, loading} = useUserInfo()
-  // eslint-disable-next-line no-unused-vars
   const [token, setToken] = useState(null)
 
   const { books, handleFetchMore, refetch, error } = useBooks({
@@ -43,9 +43,11 @@ function App() {
                 handleFetchMore={handleFetchMore}
                 error={error}
                 refetch={refetch}
+                token={token}
               />
             }
           />
+          <Route path="/AuthorList" element={<AuthorList />} />
         </Routes>
       </Suspense>
     </>

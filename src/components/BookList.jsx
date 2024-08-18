@@ -19,7 +19,7 @@ import { RiMenLine, RiWomenLine, RiShieldUserLine } from 'react-icons/ri'
 import PropTypes from 'prop-types'
 import AddBook from './AddBook'
 
-const BookList = ({ books, handleFetchMore, error, refetch }) => {
+const BookList = ({ books, handleFetchMore, error, refetch, token }) => {
   const [value, setValue] = useState(false)
   const [bookToEdit, setBookToEdit] = useState()
   const toast = useToast()
@@ -116,22 +116,24 @@ const BookList = ({ books, handleFetchMore, error, refetch }) => {
                 ))}
             </Box>
           </Box>
-          <Box
-            display="flex"
-            flexDirection="column"
-            justifyContent="space-between"
-          >
-            <IconButton
-              colorScheme="blue"
-              icon={<EditIcon />}
-              onClick={() => handleEdit(b)}
-            />
-            <IconButton
-              colorScheme="red"
-              icon={<DeleteIcon />}
-              onClick={handleDelete}
-            />
-          </Box>
+          {token && (
+            <Box
+              display="flex"
+              flexDirection="column"
+              justifyContent="space-between"
+            >
+              <IconButton
+                colorScheme="blue"
+                icon={<EditIcon />}
+                onClick={() => handleEdit(b)}
+              />
+              <IconButton
+                colorScheme="red"
+                icon={<DeleteIcon />}
+                onClick={handleDelete}
+              />
+            </Box>
+          )}
         </Flex>
       ))}
       <Center p={2}>
@@ -179,6 +181,7 @@ BookList.propTypes = {
   handleFetchMore: PropTypes.func.isRequired,
   error: PropTypes.func,
   refetch: PropTypes.func,
+  token: PropTypes.string,
 }
 
 export default BookList
