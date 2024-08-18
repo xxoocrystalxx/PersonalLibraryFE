@@ -16,6 +16,12 @@
 
 # CHANGELOG
 
+## [2024-08-18] New Functionality
+
+- Add list for managing authors
+- add buttons in Booklist for edit books
+- implemented pagination for authors
+
 ## [2024-08-17] Migrating create-app-react to react vite
 
 - Changed component js with jsx

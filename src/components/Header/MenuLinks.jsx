@@ -17,6 +17,7 @@ import { AddIcon } from '@chakra-ui/icons'
 import AddBook from '../AddBook'
 import { useConfig } from '../../hooks/useConfig'
 import PropTypes from 'prop-types'
+import { FaAddressBook, FaSignOutAlt } from 'react-icons/fa'
 
 const MenuToggle = ({ toggle, isMenuOpen }) => (
   <Box display={{ base: 'block', md: 'none' }} onClick={toggle}>
@@ -96,17 +97,18 @@ const MenuLinks = ({ signOut, data, refetch }) => {
                         _hover={{ textDecoration: 'none', bg: 'gray.100' }}
                         bg={'white'}
                         onClick={onClosePop}
+                        leftIcon={<Icon as={FaAddressBook} />}
                       >
                         Author List
                       </Button>
-                      <Link
-                        as={Button}
+                      <Button
                         _hover={{ textDecoration: 'none', bg: 'gray.100' }}
                         onClick={signOut}
                         bg={'white'}
+                        leftIcon={<Icon as={FaSignOutAlt} />}
                       >
                         Logout
-                      </Link>
+                      </Button>
                     </PopoverContent>
                   </>
                 )}

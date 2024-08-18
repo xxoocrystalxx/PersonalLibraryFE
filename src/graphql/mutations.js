@@ -80,3 +80,12 @@ export const EDIT_BOOK = gql`
   }
   ${BOOK_DETAILS}
 `
+
+export const EDIT_AUTHOR = gql`
+  mutation editAuthor($id: ID!, $name: String!) {
+    editAuthor(id: $id, name: $name) {
+      id
+      name
+    }
+  }
+`

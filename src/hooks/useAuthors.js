@@ -13,8 +13,7 @@ const useAuthors = (variables) => {
     if (!canFetchMore) {
       return
     }
-    console.log('fetchmore')
-    console.log(data.allAuthors.pageInfo)
+
     fetchMore({
       variables: {
         after: data.allAuthors.pageInfo.endCursor,
