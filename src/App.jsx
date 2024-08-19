@@ -1,4 +1,4 @@
-import { Suspense, lazy, useState } from 'react'
+import { Suspense, lazy, useEffect, useState } from 'react'
 import { Route, Routes } from 'react-router-dom'
 // import Migrate from './components/Migrate';
 import useBooks from './hooks/useBooks'
@@ -25,6 +25,14 @@ function App() {
   })
   const config = useConfig()
   const showSignUp = config.REACT_APP_SHOW_SIGNUP === 'true'
+
+  useEffect(() => {
+    // Retrieve the token from localStorage if it exists
+    const savedToken = localStorage.getItem('library-user-token')
+    if (savedToken) {
+      setToken(savedToken)
+    }
+  }, [])
 
   return (
     <>
