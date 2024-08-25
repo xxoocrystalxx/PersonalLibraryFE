@@ -17,7 +17,7 @@ function App() {
   const [token, setToken] = useState(null)
 
   const { booksCursor, handleFetchMore, refetch, error } = useBooks({
-    first: 5,
+    first: 10,
   })
 
   const authorsFetch = useAuthors({

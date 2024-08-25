@@ -30,6 +30,7 @@ const cache = new InMemoryCache({
     Query: {
       fields: {
         allBooks: relayStylePagination(),
+        allAuthors: relayStylePagination(),
       },
     },
   },

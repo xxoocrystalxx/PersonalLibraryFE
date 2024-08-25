@@ -10,8 +10,13 @@ export const USER_INFO = gql`
 `
 
 export const GET_AUTHORS = gql`
-  query allAuthors($search: String, $first: Int, $after: String) {
-    allAuthors(search: $search, first: $first, after: $after) {
+  query allAuthors(
+    $search: String
+    $first: Int
+    $after: String
+    $sort: String
+  ) {
+    allAuthors(search: $search, first: $first, after: $after, sort: $sort) {
       edges {
         cursor
         node {

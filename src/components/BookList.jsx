@@ -55,6 +55,9 @@ const BookList = ({ booksCursor, handleFetchMore, error, refetch, token }) => {
   }
   return (
     <Box>
+      <Box borderWidth="1px" borderRadius="lg" p={2}>
+        <Text fontSize="2xl">Total: {booksCursor.totalCount}</Text>
+      </Box>
       {books.map((b) => (
         <Flex
           key={b.id}
