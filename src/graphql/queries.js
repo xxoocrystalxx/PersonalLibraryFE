@@ -1,5 +1,5 @@
-import { gql } from '@apollo/client'
-import { BOOK_DETAILS } from './fragments'
+import { gql } from "@apollo/client";
+import { BOOK_DETAILS } from "./fragments";
 
 export const USER_INFO = gql`
   query {
@@ -7,7 +7,7 @@ export const USER_INFO = gql`
       username
     }
   }
-`
+`;
 
 export const GET_AUTHORS = gql`
   query allAuthors(
@@ -23,6 +23,9 @@ export const GET_AUTHORS = gql`
           id
           name
           bookCount
+          books {
+            ...BookDetails
+          }
         }
       }
       pageInfo {
@@ -32,21 +35,22 @@ export const GET_AUTHORS = gql`
       totalCount
     }
   }
-`
+  ${BOOK_DETAILS}
+`;
 export const GET_AUTHORS_SYMPLY = gql`
   query {
     allAuthorSimply {
       name
     }
   }
-`
+`;
 export const GET_GENRES = gql`
   query {
     allGenres {
       name
     }
   }
-`
+`;
 export const GET_BOOKS = gql`
   query allBooks($search: String, $first: Int, $after: String) {
     allBooks(search: $search, first: $first, after: $after) {
@@ -64,4 +68,4 @@ export const GET_BOOKS = gql`
     }
   }
   ${BOOK_DETAILS}
-`
+`;

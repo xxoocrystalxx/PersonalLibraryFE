@@ -18,90 +18,95 @@ import {
   Text,
   useDisclosure,
   useToast,
-} from '@chakra-ui/react'
-import Loader from './Loader'
-import { DeleteIcon, EditIcon } from '@chakra-ui/icons'
-import { useEffect, useState } from 'react'
-import PropTypes from 'prop-types'
-import useEditAuthor from '../hooks/useEditAuthor'
+} from "@chakra-ui/react";
+import Loader from "./Loader";
+import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
+import { useEffect, useState } from "react";
+import PropTypes from "prop-types";
+import useEditAuthor from "../hooks/useEditAuthor";
+import BookCard from "./BookCard";
 
 const AuthorList = ({ authorsFetch }) => {
-  const [authorToEdit, setAuthorToEdit] = useState({ name: '' })
-  const [value, setValue] = useState(false)
-  const [orderBy, setOrderBy] = useState()
-  const [editAuthor] = useEditAuthor()
-  const { isOpen, onOpen, onClose } = useDisclosure()
-  const toast = useToast()
+  const [authorToEdit, setAuthorToEdit] = useState({ name: "" });
+  const [selectedAuthor, setSelectedAuthor] = useState(null);
+  const [value, setValue] = useState(false);
+  const [orderBy, setOrderBy] = useState();
+  const [editAuthor] = useEditAuthor();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const toast = useToast();
 
   useEffect(() => {
     // Refetch data whenever the sort option changes
-    authorsFetch.refetch({ sort: orderBy })
-  }, [orderBy, authorsFetch.refetch])
+    authorsFetch.refetch({ sort: orderBy });
+  }, [orderBy, authorsFetch.refetch]);
 
-  if (authorsFetch.loading) return <Loader />
+  if (authorsFetch.loading) return <Loader />;
 
   if (authorsFetch.error) {
-    console.log(authorsFetch.error)
+    console.log(authorsFetch.error);
     toast({
-      title: 'Fetch book',
+      title: "Fetch book",
       description: authorsFetch.error.graphQLErrors[0].message,
-      status: 'error',
+      status: "error",
       duration: 5000,
       isClosable: true,
-    })
-    return
+    });
+    return;
   }
 
   const authors =
-    authorsFetch.authorsCursor?.edges.map((edge) => edge.node) || []
+    authorsFetch.authorsCursor?.edges.map((edge) => edge.node) || [];
 
-  console.log(authors)
   const openEditModal = (author) => {
-    setAuthorToEdit(author)
-    onOpen()
-  }
+    setAuthorToEdit(author);
+    onOpen();
+  };
 
-  const handleDelete = (author) => {}
+  const handleAuthorClick = (author) => {
+    setSelectedAuthor(selectedAuthor === author ? null : author);
+  };
+
+  const handleDelete = (author) => {};
 
   const handleInputChange = (e) => {
     setAuthorToEdit((prevAuthor) => ({
       ...prevAuthor,
       name: e.target.value,
-    }))
-  }
+    }));
+  };
 
   const handleEditAuthor = async () => {
     try {
-      await editAuthor(authorToEdit)
-      onClose()
+      await editAuthor(authorToEdit);
+      onClose();
       toast({
-        title: 'Edit successfully',
-        status: 'success',
+        title: "Edit successfully",
+        status: "success",
         duration: 5000,
         isClosable: true,
-      })
+      });
     } catch (error) {
       toast({
         title: error.graphQLErrors[0].message,
-        status: 'error',
+        status: "error",
         duration: 5000,
         isClosable: true,
-      })
+      });
     }
-  }
+  };
 
   const handleFetchMore = () => {
-    authorsFetch.handleFetchMore()
-    setValue(true)
+    authorsFetch.handleFetchMore();
+    setValue(true);
     setTimeout(() => {
-      setValue(false)
-    }, 1000)
-  }
+      setValue(false);
+    }, 1000);
+  };
 
   const handleSelectOrder = (event) => {
-    const value = event.target.value
-    setOrderBy(value)
-  }
+    const value = event.target.value;
+    setOrderBy(value);
+  };
 
   return (
     <>
@@ -132,43 +137,67 @@ const AuthorList = ({ authorsFetch }) => {
       </Flex>
       <Box>
         {authors.map((b) => (
-          <Flex
-            key={b.name}
-            shadow="md"
-            borderWidth="1px"
-            p={2}
-            justifyContent="space-between"
-            _hover={{ shadow: 'xl' }}
-            m={2}
-          >
-            <Box flex="1" alignItems="center" display="flex" pl={2}>
-              <Heading as="h4" size="md">
-                {b.name}
-              </Heading>
-              <Badge
-                ml={2}
-                colorScheme="green"
-                variant="outline"
-                fontSize="0.9em"
-              >
-                {b.bookCount}
-              </Badge>
-            </Box>
+          <div key={b.name}>
+            <Flex
+              key={b.name}
+              shadow="md"
+              borderWidth="1px"
+              p={2}
+              justifyContent="space-between"
+              _hover={{ shadow: "xl" }}
+              m={2}
+              cursor="pointer"
+              onClick={() => handleAuthorClick(b)}
+            >
+              <Box flex="1" alignItems="center" display="flex" pl={2}>
+                <Heading as="h4" size="md">
+                  {b.name}
+                </Heading>
+                <Badge
+                  ml={2}
+                  colorScheme="green"
+                  variant="outline"
+                  fontSize="0.9em"
+                >
+                  {b.bookCount}
+                </Badge>
+              </Box>
 
-            <Box display="flex">
-              <IconButton
-                colorScheme="blue"
-                mr={2}
-                icon={<EditIcon />}
-                onClick={() => openEditModal(b)}
-              />
-              <IconButton
-                colorScheme="red"
-                icon={<DeleteIcon />}
-                onClick={() => handleDelete(b)}
-              />
-            </Box>
-          </Flex>
+              <Box display="flex">
+                <IconButton
+                  colorScheme="blue"
+                  mr={2}
+                  icon={<EditIcon />}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    openEditModal(b);
+                  }}
+                />
+                <IconButton
+                  colorScheme="red"
+                  icon={<DeleteIcon />}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDelete(b);
+                  }}
+                />
+              </Box>
+            </Flex>
+
+            {selectedAuthor?.name === b.name && (
+              <Box px={3}>
+                {b.books.map((book) => (
+                  <BookCard
+                    key={book.id}
+                    book={book}
+                    // onEdit={handleEdit}
+                    onDelete={() => console.log("Delete")}
+                    // token={token}
+                  />
+                ))}
+              </Box>
+            )}
+          </div>
         ))}
       </Box>
       <Center p={2}>
@@ -203,8 +232,8 @@ const AuthorList = ({ authorsFetch }) => {
         </ModalContent>
       </Modal>
     </>
-  )
-}
+  );
+};
 
 AuthorList.propTypes = {
   authorsFetch: PropTypes.shape({
@@ -220,5 +249,5 @@ AuthorList.propTypes = {
     //   })
     // ),
   }),
-}
-export default AuthorList
+};
+export default AuthorList;

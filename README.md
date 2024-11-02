@@ -16,6 +16,12 @@
 
 # CHANGELOG
 
+## [2024-11-02]
+
+- Refactoring BookList extracting BookCard.
+- Show author list with their book list.
+- Can order by bookCount
+
 ## [2024-08-18] New Functionality
 
 - Add list for managing authors
