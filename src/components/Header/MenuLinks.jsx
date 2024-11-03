@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState } from "react";
 import {
   Link,
   Box,
@@ -10,42 +10,42 @@ import {
   PopoverContent,
   Icon,
   useDisclosure,
-} from '@chakra-ui/react'
-import { Link as ReachLink } from 'react-router-dom'
-import { IoClose, IoMenu } from 'react-icons/io5'
-import { AddIcon } from '@chakra-ui/icons'
-import AddBook from '../AddBook'
-import { useConfig } from '../../hooks/useConfig'
-import PropTypes from 'prop-types'
-import { FaAddressBook, FaSignOutAlt } from 'react-icons/fa'
+} from "@chakra-ui/react";
+import { Link as ReachLink } from "react-router-dom";
+import { IoClose, IoMenu } from "react-icons/io5";
+import { AddIcon } from "@chakra-ui/icons";
+import AddBook from "../AddBook";
+import { useConfig } from "../../hooks/useConfig";
+import PropTypes from "prop-types";
+import { FaAddressBook, FaSignOutAlt } from "react-icons/fa";
 
 const MenuToggle = ({ toggle, isMenuOpen }) => (
-  <Box display={{ base: 'block', md: 'none' }} onClick={toggle}>
+  <Box display={{ base: "block", md: "none" }} onClick={toggle}>
     {isMenuOpen ? <Icon as={IoClose} /> : <Icon as={IoMenu} />}
   </Box>
-)
+);
 
 const MenuLinks = ({ signOut, data, refetch }) => {
-  const [isMenuOpen, setisMenuOpen] = useState(false)
+  const [isMenuOpen, setisMenuOpen] = useState(false);
   //add book component
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const toggle = () => setisMenuOpen(!isMenuOpen)
-  const config = useConfig()
-  const showSignUp = config.REACT_APP_SHOW_SIGNUP === 'true'
+  const toggle = () => setisMenuOpen(!isMenuOpen);
+  const config = useConfig();
+  const showSignUp = config.REACT_APP_SHOW_SIGNUP === "true";
 
   return (
     <>
       <MenuToggle toggle={toggle} isMenuOpen={isMenuOpen} />
       <Box
-        display={{ base: isMenuOpen ? 'block' : 'none', md: 'block' }}
-        flexBasis={{ base: '100%', md: 'auto' }}
+        display={{ base: isMenuOpen ? "block" : "none", md: "block" }}
+        flexBasis={{ base: "100%", md: "auto" }}
       >
         <Stack
           spacing={4}
           align="center"
-          justify={['center', 'space-between', 'flex-end', 'flex-end']}
-          direction={['column', 'row', 'row', 'row']}
+          justify={["center", "space-between", "flex-end", "flex-end"]}
+          direction={["column", "row", "row", "row"]}
           pt={[2, 2, 0, 0]}
         >
           {data === null ? (
@@ -53,9 +53,9 @@ const MenuLinks = ({ signOut, data, refetch }) => {
               <Link
                 as={ReachLink}
                 to="/SignIn"
-                rounded={'md'}
+                rounded={"md"}
                 _hover={{
-                  textDecoration: 'none',
+                  textDecoration: "none",
                 }}
               >
                 <Button colorScheme="red" variant="ghost" size="md">
@@ -66,9 +66,9 @@ const MenuLinks = ({ signOut, data, refetch }) => {
                 <Link
                   as={ReachLink}
                   to="/SignUp"
-                  rounded={'md'}
+                  rounded={"md"}
                   _hover={{
-                    textDecoration: 'none',
+                    textDecoration: "none",
                   }}
                 >
                   <Button colorScheme="red" variant="ghost" size="md">
@@ -87,24 +87,34 @@ const MenuLinks = ({ signOut, data, refetch }) => {
                         as={Button}
                         name={data.username}
                         size="md"
-                        _hover={{ bg: 'teal.700' }}
+                        _hover={{ bg: "teal.700" }}
                       />
                     </PopoverTrigger>
-                    <PopoverContent border={0} boxShadow={'xl'} w={'2xs'}>
+                    <PopoverContent border={0} boxShadow={"xl"} w={"2xs"}>
                       <Button
                         as={ReachLink}
                         to="/AuthorList"
-                        _hover={{ textDecoration: 'none', bg: 'gray.100' }}
-                        bg={'white'}
+                        _hover={{ textDecoration: "none", bg: "gray.100" }}
+                        bg={"white"}
                         onClick={onClosePop}
                         leftIcon={<Icon as={FaAddressBook} />}
                       >
                         Author List
                       </Button>
                       <Button
-                        _hover={{ textDecoration: 'none', bg: 'gray.100' }}
+                        as={ReachLink}
+                        to="/AuthorWithSavedBook"
+                        _hover={{ textDecoration: "none", bg: "gray.100" }}
+                        bg={"white"}
+                        onClick={onClosePop}
+                        leftIcon={<Icon as={FaAddressBook} />}
+                      >
+                        Author List With Saved Book
+                      </Button>
+                      <Button
+                        _hover={{ textDecoration: "none", bg: "gray.100" }}
                         onClick={signOut}
-                        bg={'white'}
+                        bg={"white"}
                         leftIcon={<Icon as={FaSignOutAlt} />}
                       >
                         Logout
@@ -135,13 +145,13 @@ const MenuLinks = ({ signOut, data, refetch }) => {
         </Stack>
       </Box>
     </>
-  )
-}
+  );
+};
 
 MenuToggle.propTypes = {
   toggle: PropTypes.func.isRequired,
   isMenuOpen: PropTypes.bool.isRequired,
-}
+};
 
 MenuLinks.propTypes = {
   signOut: PropTypes.func.isRequired,
@@ -149,6 +159,6 @@ MenuLinks.propTypes = {
     username: PropTypes.string.isRequired,
   }),
   refetch: PropTypes.func.isRequired,
-}
+};
 
-export default MenuLinks
+export default MenuLinks;

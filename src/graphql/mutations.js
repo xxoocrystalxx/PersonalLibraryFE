@@ -1,5 +1,5 @@
-import { gql } from '@apollo/client'
-import { BOOK_DETAILS } from './fragments'
+import { gql } from "@apollo/client";
+import { BOOK_DETAILS } from "./fragments";
 
 export const SIGN_UP = gql`
   mutation createUser($username: String!, $passwordHash: String!) {
@@ -7,7 +7,7 @@ export const SIGN_UP = gql`
       username
     }
   }
-`
+`;
 
 export const LOGIN = gql`
   mutation login($username: String!, $password: String!) {
@@ -15,7 +15,7 @@ export const LOGIN = gql`
       value
     }
   }
-`
+`;
 
 export const CREATE_BOOK = gql`
   mutation createBook(
@@ -46,7 +46,7 @@ export const CREATE_BOOK = gql`
     }
   }
   ${BOOK_DETAILS}
-`
+`;
 
 export const EDIT_BOOK = gql`
   mutation editBook(
@@ -79,13 +79,14 @@ export const EDIT_BOOK = gql`
     }
   }
   ${BOOK_DETAILS}
-`
+`;
 
 export const EDIT_AUTHOR = gql`
   mutation editAuthor($id: ID!, $name: String!) {
     editAuthor(id: $id, name: $name) {
       id
       name
+      alias
     }
   }
-`
+`;

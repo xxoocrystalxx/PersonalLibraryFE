@@ -11,62 +11,63 @@ import {
   DrawerOverlay,
   DrawerContent,
   DrawerCloseButton,
-} from '@chakra-ui/react'
-import { Formik, Form } from 'formik'
-import * as yup from 'yup'
-import CreatableSelect from 'react-select/creatable'
-import PropTypes from 'prop-types'
+} from "@chakra-ui/react";
+import { Formik, Form } from "formik";
+import * as yup from "yup";
+import CreatableSelect from "react-select/creatable";
+import PropTypes from "prop-types";
 
-import TextInput from './Formik/TextInput'
-import useAddBook from '../hooks/useAddBook'
-import TextArea from './Formik/TextArea'
-import MyRating from './Formik/Rating'
-import useGenres from '../hooks/useGenres'
-import SelectField from './Formik/SelectField'
-import MySwitch from './Formik/MySwitch'
-import useEditBook from '../hooks/useEditBook'
-import useAuthorsSimply from '../hooks/useAuthorsSimply'
+import TextInput from "./Formik/TextInput";
+import useAddBook from "../hooks/useAddBook";
+import TextArea from "./Formik/TextArea";
+import MyRating from "./Formik/Rating";
+import useGenres from "../hooks/useGenres";
+import SelectField from "./Formik/SelectField";
+import MySwitch from "./Formik/MySwitch";
+import useEditBook from "../hooks/useEditBook";
+import useAuthorsSimply from "../hooks/useAuthorsSimply";
 
 const timeOptions = [
-  { value: '古代', label: '古代' },
-  { value: '现代', label: '现代' },
-  { value: '未世', label: '未世' },
-]
+  { value: "古代", label: "古代" },
+  { value: "现代", label: "现代" },
+  { value: "未世", label: "未世" },
+  { value: "星际", label: "星际" },
+];
 
 const validationSchema = yup.object().shape({
-  title: yup.string().required('title is required'),
-  author: yup.string().required('author is required'),
-  time: yup.string().required('time is required'),
-})
+  title: yup.string().required("title is required"),
+  author: yup.string().required("author is required"),
+  time: yup.string().required("time is required"),
+});
 
 const AddBook = ({ isOpen, onClose, refetch, book }) => {
-  const [addBook] = useAddBook()
-  const [editBook] = useEditBook()
-  const { authors } = useAuthorsSimply()
-  const { genres } = useGenres()
-  const toast = useToast()
+  const [addBook] = useAddBook();
+  const [editBook] = useEditBook();
+  const { authors } = useAuthorsSimply();
+  const { genres } = useGenres();
+  const toast = useToast();
 
-  if (!authors || !genres) return null
+  if (!authors || !genres) return null;
 
   let initialValues = {
-    title: '',
-    author: '',
-    male: '',
-    female: '',
-    description: '',
-    comment: '',
-    time: '古代',
+    title: "",
+    author: "",
+    male: "",
+    female: "",
+    description: "",
+    comment: "",
+    time: "古代",
     rating: 0,
     genres: [],
     saved: false,
-  }
+  };
 
   const getGenreOptions = (genres) => {
     return genres.map((g) => ({
       label: g.name,
       value: g.name,
-    }))
-  }
+    }));
+  };
 
   if (book) {
     initialValues = {
@@ -80,15 +81,15 @@ const AddBook = ({ isOpen, onClose, refetch, book }) => {
       rating: book.rating,
       genres: getGenreOptions(book.genres),
       saved: book.saved,
-    }
+    };
   }
 
   const options = authors.map((a) => ({
     label: a.name,
     value: a.name,
-  }))
+  }));
 
-  const genreOptions = getGenreOptions(genres)
+  const genreOptions = getGenreOptions(genres);
 
   const onSubmit = async (values, { resetForm }) => {
     const {
@@ -101,9 +102,9 @@ const AddBook = ({ isOpen, onClose, refetch, book }) => {
       time,
       rating,
       saved,
-    } = values
+    } = values;
     // console.log(values)
-    const genres = values.genres ? values.genres.map((g) => g.value) : []
+    const genres = values.genres ? values.genres.map((g) => g.value) : [];
     try {
       if (book) {
         await editBook({
@@ -118,8 +119,8 @@ const AddBook = ({ isOpen, onClose, refetch, book }) => {
           rating,
           genres,
           saved,
-        })
-        onClose()
+        });
+        onClose();
       } else {
         await addBook({
           title,
@@ -132,28 +133,28 @@ const AddBook = ({ isOpen, onClose, refetch, book }) => {
           rating,
           genres,
           saved,
-        })
+        });
       }
 
       toast({
         title: book ? `Book ${title} edited` : `Book ${title} created`,
-        status: 'success',
+        status: "success",
         duration: 5000,
         isClosable: true,
-      })
+      });
 
-      resetForm(initialValues)
+      resetForm(initialValues);
 
-      refetch()
+      refetch();
     } catch (e) {
       toast({
         title: e.graphQLErrors[0].message,
-        status: 'error',
+        status: "error",
         duration: 5000,
         isClosable: true,
-      })
+      });
     }
-  }
+  };
 
   return (
     <Drawer placement="right" onClose={onClose} isOpen={isOpen}>
@@ -161,7 +162,7 @@ const AddBook = ({ isOpen, onClose, refetch, book }) => {
       <DrawerContent>
         <DrawerCloseButton />
         <DrawerHeader borderBottomWidth="1px">
-          <Heading color="teal.400">{book ? 'Edit Book' : 'Add Book'}</Heading>
+          <Heading color="teal.400">{book ? "Edit Book" : "Add Book"}</Heading>
         </DrawerHeader>
 
         <DrawerBody>
@@ -185,7 +186,7 @@ const AddBook = ({ isOpen, onClose, refetch, book }) => {
                       value={props.values.author}
                     />
                   </Box>
-                  <Stack direction={['column', 'row', 'row', 'row']}>
+                  <Stack direction={["column", "row", "row", "row"]}>
                     <SelectField
                       name="time"
                       placeholder="时代背景"
@@ -201,7 +202,7 @@ const AddBook = ({ isOpen, onClose, refetch, book }) => {
                       size="lg"
                     />
                   </Stack>
-                  <Stack direction={['column', 'row', 'row', 'row']}>
+                  <Stack direction={["column", "row", "row", "row"]}>
                     <TextInput name="male" placeholder="男主角" />
                     <TextInput name="female" placeholder="女主角" />
                   </Stack>
@@ -212,7 +213,7 @@ const AddBook = ({ isOpen, onClose, refetch, book }) => {
                       placeholder=" Genres "
                       closeMenuOnSelect={false}
                       onChange={(newvalue) =>
-                        props.setFieldValue('genres', newvalue)
+                        props.setFieldValue("genres", newvalue)
                       }
                       value={props.values.genres}
                       options={genreOptions}
@@ -249,8 +250,8 @@ const AddBook = ({ isOpen, onClose, refetch, book }) => {
         </DrawerFooter>
       </DrawerContent>
     </Drawer>
-  )
-}
+  );
+};
 
 AddBook.propTypes = {
   isOpen: PropTypes.bool,
@@ -283,6 +284,6 @@ AddBook.propTypes = {
     time: PropTypes.string,
     id: PropTypes.string,
   }),
-}
+};
 
-export default AddBook
+export default AddBook;

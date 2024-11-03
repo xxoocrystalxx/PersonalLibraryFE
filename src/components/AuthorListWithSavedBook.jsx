@@ -2,7 +2,6 @@ import {
   Badge,
   Box,
   Button,
-  Center,
   Flex,
   Heading,
   IconButton,
@@ -14,31 +13,25 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Select,
   Text,
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
 import Loader from "./Loader";
 import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
-import { useEffect, useState } from "react";
-import PropTypes from "prop-types";
+import { useState } from "react";
 import useEditAuthor from "../hooks/useEditAuthor";
 import BookCard from "./BookCard";
+import useAuthorsWithSavedBook from "../hooks/useAuthorsWithSavedBook";
 
-const AuthorList = ({ authorsFetch }) => {
+const AuthorListWithSavedBook = () => {
   const [authorToEdit, setAuthorToEdit] = useState({ name: "" });
   const [selectedAuthor, setSelectedAuthor] = useState(null);
-  const [value, setValue] = useState(false);
-  const [orderBy, setOrderBy] = useState();
   const [editAuthor] = useEditAuthor();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
 
-  useEffect(() => {
-    // Refetch data whenever the sort option changes
-    authorsFetch.refetch({ sort: orderBy });
-  }, [orderBy, authorsFetch.refetch]);
+  const authorsFetch = useAuthorsWithSavedBook();
 
   if (authorsFetch.loading) return <Loader />;
 
@@ -54,8 +47,7 @@ const AuthorList = ({ authorsFetch }) => {
     return;
   }
 
-  const authors =
-    authorsFetch.authorsCursor?.edges.map((edge) => edge.node) || [];
+  const authors = authorsFetch.authors || [];
 
   const openEditModal = (author) => {
     setAuthorToEdit(author);
@@ -95,19 +87,6 @@ const AuthorList = ({ authorsFetch }) => {
     }
   };
 
-  const handleFetchMore = () => {
-    authorsFetch.handleFetchMore();
-    setValue(true);
-    setTimeout(() => {
-      setValue(false);
-    }, 1000);
-  };
-
-  const handleSelectOrder = (event) => {
-    const value = event.target.value;
-    setOrderBy(value);
-  };
-
   return (
     <>
       <Flex
@@ -119,21 +98,8 @@ const AuthorList = ({ authorsFetch }) => {
         alignItems="center"
       >
         <Text fontSize="2xl" color="white" pr={3} borderEnd="1px">
-          Total: {authorsFetch.authorsCursor.totalCount}
+          Total Authors: {authors.length}
         </Text>
-        <Text fontSize="2xl" ml={3} color="white">
-          Order By:
-        </Text>
-        <Select
-          ml={5}
-          width="auto"
-          variant="filled"
-          value={orderBy}
-          onChange={handleSelectOrder}
-        >
-          <option value="_id:-1"> Desc</option>
-          <option value="bookCount:-1"> BookCount</option>
-        </Select>
       </Flex>
       <Box>
         {authors.map((b) => (
@@ -153,17 +119,18 @@ const AuthorList = ({ authorsFetch }) => {
                 <Heading as="h4" size="md">
                   {b.name}
                 </Heading>
-                <Text ms={2}>{b.alias.join("/")}</Text>
                 <Badge
                   ml={2}
                   colorScheme="green"
                   variant="outline"
                   fontSize="0.9em"
                 >
+                  Total books:
                   {b.bookCount}
                 </Badge>
                 <Badge ml={2} colorScheme="red" fontSize="0.9em">
-                  {b.books.filter((book) => book.saved).length}
+                  Saved books:
+                  {b.savedBookCount}
                 </Badge>
               </Box>
 
@@ -204,17 +171,6 @@ const AuthorList = ({ authorsFetch }) => {
           </div>
         ))}
       </Box>
-      <Center p={2}>
-        <Button
-          colorScheme="teal"
-          variant="solid"
-          onClick={handleFetchMore}
-          isLoading={value}
-          isDisabled={!authorsFetch.authorsCursor.pageInfo.hasNextPage}
-        >
-          Load More
-        </Button>
-      </Center>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
@@ -239,19 +195,4 @@ const AuthorList = ({ authorsFetch }) => {
   );
 };
 
-AuthorList.propTypes = {
-  authorsFetch: PropTypes.shape({
-    authorsCursor: PropTypes.shape(),
-    handleFetchMore: PropTypes.func,
-    refetch: PropTypes.func,
-    error: PropTypes.shape(),
-    loading: PropTypes.bool,
-    // edges: PropTypes.arrayOf(
-    //   PropTypes.shape({
-    //     cursor: PropTypes.string,
-    //     node: PropTypes.shape(),
-    //   })
-    // ),
-  }),
-};
-export default AuthorList;
+export default AuthorListWithSavedBook;

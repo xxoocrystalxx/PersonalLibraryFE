@@ -26,6 +26,7 @@ export const GET_AUTHORS = gql`
           books {
             ...BookDetails
           }
+          alias
         }
       }
       pageInfo {
@@ -44,6 +45,22 @@ export const GET_AUTHORS_SYMPLY = gql`
     }
   }
 `;
+
+export const GET_AUTHORS_SAVED_BOOKS = gql`
+  query authorsWithSavedBook {
+    authorsWithSavedBook {
+      savedBookCount
+      name
+      alias
+      books {
+        ...BookDetails
+      }
+      bookCount
+    }
+  }
+  ${BOOK_DETAILS}
+`;
+
 export const GET_GENRES = gql`
   query {
     allGenres {
