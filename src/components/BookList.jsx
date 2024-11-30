@@ -10,14 +10,24 @@ import {
 import PropTypes from "prop-types";
 import AddBook from "./AddBook";
 import BookCard from "./BookCard";
+import Loader from "./Loader";
+import useDeleteBook from "../hooks/useDeleteBook";
 
-const BookList = ({ booksCursor, handleFetchMore, error, refetch, token }) => {
+const BookList = ({
+  booksCursor,
+  loading,
+  handleFetchMore,
+  error,
+  refetch,
+  token,
+}) => {
   const [value, setValue] = useState(false);
   const [bookToEdit, setBookToEdit] = useState();
+  const [deleteBook] = useDeleteBook();
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  if (!booksCursor) return "";
+  if (loading) return <Loader />;
   const books = booksCursor ? booksCursor.edges.map((edge) => edge.node) : [];
 
   if (error) {
@@ -28,6 +38,7 @@ const BookList = ({ booksCursor, handleFetchMore, error, refetch, token }) => {
       duration: 5000,
       isClosable: true,
     });
+    return;
   }
   const handle = () => {
     handleFetchMore();
@@ -37,8 +48,25 @@ const BookList = ({ booksCursor, handleFetchMore, error, refetch, token }) => {
     }, 1000);
   };
 
-  const handleDelete = () => {
-    console.log("delte");
+  const handleDelete = async (book) => {
+    try {
+      await deleteBook(book.id);
+      onClose();
+      toast({
+        title: `Delete ${book.title} successfully!`,
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
+      refetch();
+    } catch (error) {
+      toast({
+        title: error.graphQLErrors[0].message,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    }
   };
 
   const handleEdit = (b) => {
@@ -55,7 +83,7 @@ const BookList = ({ booksCursor, handleFetchMore, error, refetch, token }) => {
           key={b.id}
           book={b}
           onEdit={handleEdit}
-          onDelete={() => console.log("Delete")}
+          onDelete={handleDelete}
           token={token}
         />
       ))}
@@ -116,6 +144,7 @@ BookList.propTypes = {
   //   })
   // ),
   handleFetchMore: PropTypes.func.isRequired,
+  loading: PropTypes.bool,
   error: PropTypes.func,
   refetch: PropTypes.func,
   token: PropTypes.string,

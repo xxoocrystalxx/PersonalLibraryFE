@@ -94,7 +94,7 @@ const BookCard = ({ book, token, onEdit, onDelete }) => {
           <IconButton
             colorScheme="red"
             icon={<DeleteIcon />}
-            onClick={onDelete}
+            onClick={() => onDelete(book)}
           />
         </Box>
       )}

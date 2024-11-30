@@ -19,7 +19,7 @@ function App() {
   // const {data, loading} = useUserInfo()
   const [token, setToken] = useState(null);
 
-  const { booksCursor, handleFetchMore, refetch, error } = useBooks({
+  const { booksCursor, loading, handleFetchMore, refetch, error } = useBooks({
     first: 10,
   });
 
@@ -58,6 +58,7 @@ function App() {
               <BookList
                 booksCursor={booksCursor}
                 handleFetchMore={handleFetchMore}
+                loading={loading}
                 error={error}
                 refetch={refetch}
                 token={token}

@@ -16,6 +16,17 @@
 
 # CHANGELOG
 
+## [2024-11-30] Added new functionality
+
+- Added delete book function
+- Added delete author function
+
+## [2024-11-03] Added new functionality
+
+- Retrieving author order by book list that are saved.
+- Showing author alias in author list
+- Add search by author name and author alias.
+
 ## [2024-11-02]
 
 - Refactoring BookList extracting BookCard.

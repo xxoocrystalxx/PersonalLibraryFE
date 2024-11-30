@@ -90,3 +90,19 @@ export const EDIT_AUTHOR = gql`
     }
   }
 `;
+
+export const DELETE_AUTHOR = gql`
+  mutation deleteAuthor($id: ID!) {
+    deleteAuthor(id: $id) {
+      id
+    }
+  }
+`;
+
+export const DELETE_BOOK = gql`
+  mutation deleteBook($id: ID!) {
+    deleteBook(id: $id) {
+      id
+    }
+  }
+`;

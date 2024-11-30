@@ -25,6 +25,7 @@ import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import useEditAuthor from "../hooks/useEditAuthor";
 import BookCard from "./BookCard";
+import useDeleteAuthor from "../hooks/useDeleteAuthor";
 
 const AuthorList = ({ authorsFetch }) => {
   const [authorToEdit, setAuthorToEdit] = useState({ name: "" });
@@ -32,6 +33,7 @@ const AuthorList = ({ authorsFetch }) => {
   const [value, setValue] = useState(false);
   const [orderBy, setOrderBy] = useState();
   const [editAuthor] = useEditAuthor();
+  const [deleteAuthor] = useDeleteAuthor();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
 
@@ -66,7 +68,26 @@ const AuthorList = ({ authorsFetch }) => {
     setSelectedAuthor(selectedAuthor === author ? null : author);
   };
 
-  const handleDelete = (author) => {};
+  const handleDelete = async (author) => {
+    try {
+      await deleteAuthor(author.id);
+      onClose();
+      toast({
+        title: `Delete ${author.name} successfully!`,
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
+      authorsFetch.refetch();
+    } catch (error) {
+      toast({
+        title: error.graphQLErrors[0].message,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    }
+  };
 
   const handleInputChange = (e) => {
     setAuthorToEdit((prevAuthor) => ({
